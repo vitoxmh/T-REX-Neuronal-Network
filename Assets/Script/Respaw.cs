@@ -26,7 +26,7 @@ public class Respaw : MonoBehaviour
         {
 
             GameManager.gm.newEnemy();
-             Destroy(col.gameObject);
+            Destroy(col.gameObject);
 
         }
 

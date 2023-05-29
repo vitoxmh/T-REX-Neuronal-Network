@@ -17,6 +17,8 @@ public class GameManager : MonoBehaviour
     public GameObject dinosaruio;
     public int especimen;
     public List<GameObject> dinos;
+    public int generation = 1;
+    public NeuralNetwork bestDino;
 
 
      private void Awake()
@@ -35,6 +37,12 @@ public class GameManager : MonoBehaviour
     }
 
 
+    public void removeList(GameObject dino){
+
+        dinos.Remove(dino);
+
+    }
+
     void Start()
     {
    
@@ -46,8 +54,9 @@ public class GameManager : MonoBehaviour
           dinos = new List<GameObject>();
 
           for(int i = 0; i <= especimen; i++){
-
+            
             GameObject nDino = Instantiate(dinosaruio, new Vector3(-5.917905f,-4.2f,0f), Quaternion.identity);
+            nDino.GetComponent<ControlDinosaurio>().network =  new NeuralNetwork(4,2,3);
             dinos.Add(nDino);   
 
           }
@@ -57,9 +66,17 @@ public class GameManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-         
-         currentSpeed += acceleration * Time.deltaTime;
-         currentSpeed = Mathf.Clamp(currentSpeed, initialSpeed, maxSpeed);
+        
+
+
+        currentSpeed += acceleration * Time.deltaTime;
+        currentSpeed = Mathf.Clamp(currentSpeed, initialSpeed, maxSpeed);
+
+        if(dinos.Count == 0){
+
+                Debug.Log("Termina el juego");
+
+        }
          
     }
 
@@ -76,6 +93,21 @@ public class GameManager : MonoBehaviour
         newEnemy.GetComponent<Enemy>().maxSpeed = maxSpeed;
         newEnemy.GetComponent<Enemy>().initialSpeed = initialSpeed;
         
+
+
+    }
+
+
+
+    public void newGeneration(GameObject bestDino){
+
+        NeuralNetwork network = bestDino.GetComponent<ControlDinosaurio>().network;
+        network.ihWeights[0][0] = Random.Range(-1f, 1f);
+        network.ihWeights[1][1] = Random.Range(-1f, 1f);
+        network.ihWeights[0][1] = Random.Range(-1f, 1f);
+        network.ihWeights[1][0] = Random.Range(-1f, 1f);
+
+
 
 
     }

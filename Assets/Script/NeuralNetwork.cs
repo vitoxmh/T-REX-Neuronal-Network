@@ -7,9 +7,9 @@ public class NeuralNetwork
     private int numInputs;
     private int numHidden;
     private int numOutputs;
-    private float[][] ihWeights; // pesos entrada -> oculta
-    private float[][] hoWeights; // pesos oculta -> salida
-    private float[] hiddenBias;
+    public float[][] ihWeights; // pesos entrada -> oculta
+    public float[][] hoWeights; // pesos oculta -> salida
+    public float[] hiddenBias;
     private float[] outputBias;
     private float[] hiddenLayer;
     private float[] outputLayer;

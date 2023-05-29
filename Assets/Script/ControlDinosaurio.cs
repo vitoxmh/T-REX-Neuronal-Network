@@ -12,14 +12,19 @@ public class ControlDinosaurio : MonoBehaviour
     private Rigidbody2D rb;
     private Animator animator;
 
-    private NeuralNetwork network;
+    public NeuralNetwork network;
 
 
     void Start()
     {
         rb = GetComponent<Rigidbody2D>();
         animator = GetComponent<Animator>();
-        network =  new NeuralNetwork(4,2,3);
+
+        if(network == null){
+
+            network = new NeuralNetwork(4,2,3);
+        }
+       
     }
 
     void Update()
@@ -103,8 +108,8 @@ public class ControlDinosaurio : MonoBehaviour
 
         if (col.gameObject.CompareTag("Enemy"))
         {
-           
-                  Destroy(gameObject);
+                GameManager.gm.removeList(gameObject);
+                Destroy(gameObject);
       
         }
 

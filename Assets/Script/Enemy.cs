@@ -9,6 +9,7 @@ public class Enemy : MonoBehaviour
     public float maxSpeed = 10f; // Velocidad máxima del piso
     public float currentSpeed;
     public float positionX;
+    public int type;
  
 
     // Start is called before the first frame update
