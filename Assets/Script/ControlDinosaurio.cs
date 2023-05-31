@@ -14,23 +14,30 @@ public class ControlDinosaurio : MonoBehaviour
 
     public NeuralNetwork network;
 
+    public bool dead = false;
+
 
     void Start()
     {
         rb = GetComponent<Rigidbody2D>();
         animator = GetComponent<Animator>();
+        
 
-        if(network == null){
-
-            network = new NeuralNetwork(4,2,3);
-        }
+        
        
     }
+
+
 
     void Update()
     {
         if (muerto) return;
+        if(network != null){
 
+               Debug.Log(network.ihWeights[0][0]+"====1");
+        }
+     
+       
         float[] inputs = new float[4];
         
         float distancia = transform.position.x - GameObject.FindGameObjectWithTag("Enemy").GetComponent<Transform>().position.x;
@@ -42,46 +49,51 @@ public class ControlDinosaurio : MonoBehaviour
 
         float[] outputs = network.FeedForward(inputs);
 
+        if(!dead){
 
-        if (enElSuelo && outputs[0] > 0.5f)
-        {
-            rb.AddForce(new Vector2(0f, velocidadSalto), ForceMode2D.Impulse);
-            enElSuelo = false;
-            animator.SetInteger("PlayerAnimation", 1);
-        }
+            if (enElSuelo && outputs[0] > 0.5f)
+            {
+                rb.AddForce(new Vector2(0f, velocidadSalto), ForceMode2D.Impulse);
+                enElSuelo = false;
+                animator.SetInteger("PlayerAnimation", 1);
+            }
 
-        if (outputs[1] > 0.5f)
-        {
-            agachado = true;
-           
-        }
+            if (outputs[1] > 0.5f)
+            {
+                agachado = true;
+            
+            }
 
-        else if (Input.GetKeyUp(KeyCode.DownArrow))
-        {
-            agachado = false;
-           
-        }
-
-
-        if(enElSuelo){
+            else if (Input.GetKeyUp(KeyCode.DownArrow))
+            {
+                agachado = false;
+            
+            }
 
 
-            if(agachado){
+            if(enElSuelo){
 
-                 animator.SetInteger("PlayerAnimation", 4); 
+
+                if(agachado){
+
+                    animator.SetInteger("PlayerAnimation", 4); 
+
+                }else{
+
+                    animator.SetInteger("PlayerAnimation", 0);
+
+                }
+                
 
             }else{
 
-                 animator.SetInteger("PlayerAnimation", 0);
+
+                animator.SetInteger("PlayerAnimation", 1);
 
             }
-            
-
         }else{
 
-
-            animator.SetInteger("PlayerAnimation", 1);
-
+             animator.SetInteger("PlayerAnimation", 3);
         }
 
     }
@@ -109,16 +121,11 @@ public class ControlDinosaurio : MonoBehaviour
         if (col.gameObject.CompareTag("Enemy"))
         {
                 GameManager.gm.removeList(gameObject);
-                Destroy(gameObject);
-      
+                dead = true;
+                rb.constraints = RigidbodyConstraints2D.FreezeAll;
+                
+       
         }
 
-
-        /*else if (col.gameObject.CompareTag("Obstaculo"))
-        {
-            muerto = true;
-            animator.SetBool("Muerto", true);
-            // Aquí puedes agregar lógica adicional para el manejo de la muerte del dinosaurio
-        }*/
     }
 }

@@ -30,6 +30,15 @@ public class Respaw : MonoBehaviour
 
         }
 
+
+     if (col.gameObject.CompareTag("Player"))
+        {
+
+
+            Destroy(col.gameObject);
+
+        }
+
     }
 
 }

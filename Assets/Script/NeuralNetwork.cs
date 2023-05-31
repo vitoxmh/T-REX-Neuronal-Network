@@ -1,24 +1,28 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class NeuralNetwork
+
+public class NeuralNetwork : ICloneable 
 {
-    private int numInputs;
-    private int numHidden;
-    private int numOutputs;
+    public int numInputs;
+    public int numHidden;
+    public int numOutputs;
     public float[][] ihWeights; // pesos entrada -> oculta
     public float[][] hoWeights; // pesos oculta -> salida
     public float[] hiddenBias;
-    private float[] outputBias;
-    private float[] hiddenLayer;
-    private float[] outputLayer;
+    public float[] outputBias;
+    public float[] hiddenLayer;
+    public float[] outputLayer;
 
     public NeuralNetwork(int numInputs, int numHidden, int numOutputs)
     {
         this.numInputs = numInputs;
         this.numHidden = numHidden;
         this.numOutputs = numOutputs;
+
+
         ihWeights = new float[numInputs][];
         for (int i = 0; i < numInputs; i++)
         {
@@ -43,23 +47,23 @@ public class NeuralNetwork
         {
             for (int j = 0; j < numHidden; j++)
             {
-                ihWeights[i][j] = Random.Range(-1f, 1f);
+                ihWeights[i][j] = UnityEngine.Random.Range(-1f, 1f);
             }
         }
         for (int i = 0; i < numHidden; i++)
         {
             for (int j = 0; j < numOutputs; j++)
             {
-                hoWeights[i][j] = Random.Range(-1f, 1f);
+                hoWeights[i][j] = UnityEngine.Random.Range(-1f, 1f);
             }
         }
         for (int i = 0; i < numHidden; i++)
         {
-            hiddenBias[i] = Random.Range(-1f, 1f);
+            hiddenBias[i] = UnityEngine.Random.Range(-1f, 1f);
         }
         for (int i = 0; i < numOutputs; i++)
         {
-            outputBias[i] = Random.Range(-1f, 1f);
+            outputBias[i] = UnityEngine.Random.Range(-1f, 1f);
         }
     }
 
@@ -91,5 +95,12 @@ public class NeuralNetwork
     {
         return 1f / (1f + Mathf.Exp(-x));
     }
+
+
+    public object Clone()
+    {
+        return (NeuralNetwork)MemberwiseClone();
+    }
+
 }
 

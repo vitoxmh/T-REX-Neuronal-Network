@@ -296,9 +296,10 @@ MonoBehaviour:
   - {fileID: 6320649955723341338, guid: 78c555ed6e81e6f4ea5b53a5af527e2c, type: 3}
   - {fileID: 6320649955723341338, guid: 78c76e6b05da4a14da20170af59a55f3, type: 3}
   dinosaruio: {fileID: 7309841925360306630, guid: caf11bce1e6459b4cb74ac11b8d209a9, type: 3}
-  especimen: 200
+  especimen: 10
   dinos: []
   generation: 1
+  gameOver: 0
 --- !u!4 &488764146
 Transform:
   m_ObjectHideFlags: 0
@@ -312,7 +313,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 2
+  m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &519420028
 GameObject:
@@ -635,7 +636,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7794395818320885532, guid: d8843e9af87acbe47999276a2505a117, type: 3}
       propertyPath: m_RootOrder
-      value: 3
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 7794395818320885532, guid: d8843e9af87acbe47999276a2505a117, type: 3}
       propertyPath: m_LocalPosition.x

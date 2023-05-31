@@ -20,12 +20,14 @@ public class InfiniteScroll : MonoBehaviour
 
     private void Update()
     {
-        // Aumentar la velocidad con el tiempo hasta alcanzar la velocidad máxima
-        currentSpeed += acceleration * Time.deltaTime;
-        currentSpeed = Mathf.Clamp(currentSpeed, initialSpeed, maxSpeed);
+        if(!GameManager.gm.gameOver){
+            // Aumentar la velocidad con el tiempo hasta alcanzar la velocidad máxima
+            currentSpeed += acceleration * Time.deltaTime;
+            currentSpeed = Mathf.Clamp(currentSpeed, initialSpeed, maxSpeed);
 
-        // Desplazar el piso hacia la izquierda a la velocidad actual
-        transform.position = new Vector3(transform.position.x - (currentSpeed * Time.deltaTime), transform.position.y, transform.position.z);
+            // Desplazar el piso hacia la izquierda a la velocidad actual
+            transform.position = new Vector3(transform.position.x - (currentSpeed * Time.deltaTime), transform.position.y, transform.position.z);
+        }
 
         // Si el piso se ha desplazado una distancia igual a su tamaño, reiniciar su posición a la posición inicial
         if (transform.position.x <= tileSize)

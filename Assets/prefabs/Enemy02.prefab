@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 6862358899793878691}
   - component: {fileID: 1529939907959839825}
   - component: {fileID: 387459572788125476}
+  - component: {fileID: -1043531585455389909}
   m_Layer: 0
   m_Name: Enemy02
   m_TagString: Enemy
@@ -155,3 +156,25 @@ MonoBehaviour:
   maxSpeed: 10
   currentSpeed: 0
   positionX: -4.2
+  type: 0
+  Animator: {fileID: 0}
+--- !u!95 &-1043531585455389909
+Animator:
+  serializedVersion: 5
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5736399845390829054}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 0}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0

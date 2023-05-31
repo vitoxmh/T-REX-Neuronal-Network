@@ -1,6 +1,8 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System.IO;
+using System.Runtime.Serialization.Formatters.Binary;
 
 public class GameManager : MonoBehaviour
 {
@@ -18,7 +20,10 @@ public class GameManager : MonoBehaviour
     public int especimen;
     public List<GameObject> dinos;
     public int generation = 1;
-    public NeuralNetwork bestDino;
+    public NeuralNetwork bestDinoNeuronal;
+    public bool gameOver = false;
+    
+
 
 
      private void Awake()
@@ -55,8 +60,9 @@ public class GameManager : MonoBehaviour
 
           for(int i = 0; i <= especimen; i++){
             
+
             GameObject nDino = Instantiate(dinosaruio, new Vector3(-5.917905f,-4.2f,0f), Quaternion.identity);
-            nDino.GetComponent<ControlDinosaurio>().network =  new NeuralNetwork(4,2,3);
+            nDino.GetComponent<ControlDinosaurio>().network =  new NeuralNetwork(4,2,2);
             dinos.Add(nDino);   
 
           }
@@ -67,14 +73,22 @@ public class GameManager : MonoBehaviour
     void Update()
     {
         
+        //Debug.Log(bestDinoNeuronal);
+        if(!gameOver){
+            currentSpeed += acceleration * Time.deltaTime;
+            currentSpeed = Mathf.Clamp(currentSpeed, initialSpeed, maxSpeed);
+        }
 
+        if(dinos.Count >= 1){
 
-        currentSpeed += acceleration * Time.deltaTime;
-        currentSpeed = Mathf.Clamp(currentSpeed, initialSpeed, maxSpeed);
+           bestDinoNeuronal  = (NeuralNetwork)dinos[0].GetComponent<ControlDinosaurio>().network.Clone();
+
+        }
 
         if(dinos.Count == 0){
 
-                Debug.Log("Termina el juego");
+               GameManager.gm.gameOver = true;
+               //reset();
 
         }
          
@@ -99,16 +113,70 @@ public class GameManager : MonoBehaviour
 
 
 
-    public void newGeneration(GameObject bestDino){
-
-        NeuralNetwork network = bestDino.GetComponent<ControlDinosaurio>().network;
-        network.ihWeights[0][0] = Random.Range(-1f, 1f);
-        network.ihWeights[1][1] = Random.Range(-1f, 1f);
-        network.ihWeights[0][1] = Random.Range(-1f, 1f);
-        network.ihWeights[1][0] = Random.Range(-1f, 1f);
+    public void newGeneration(){
 
 
 
+        for(int i = 0; i <= especimen; i++){
+            
+              
+            GameObject nDino = Instantiate(dinosaruio, new Vector3(-5.917905f,-4.2f,0f), Quaternion.identity);
+            
+          
+        NeuralNetwork t =  cruzar(bestDinoNeuronal);
+         
+            dinosaruio.GetComponent<ControlDinosaurio>().network = t;
+
+
+            dinos.Add(nDino);
+           
+
+        }
+
+
+         generation++;   
+    }
+
+
+
+
+    private NeuralNetwork cruzar(NeuralNetwork newN){
+
+
+        NeuralNetwork hijo = new NeuralNetwork(4,2,2);
+
+        hijo.numInputs = newN.numInputs;
+        hijo.numHidden = newN.numHidden;
+        hijo.numOutputs = newN.numOutputs;
+        hijo.ihWeights = newN.ihWeights;
+        hijo.hoWeights = newN.hoWeights;
+        hijo.hiddenBias = newN.hiddenBias;
+        hijo.outputBias = newN.hiddenBias;
+
+        hijo.ihWeights[0][0] = UnityEngine.Random.Range(-1f, 1f);
+        hijo.ihWeights[1][1] = UnityEngine.Random.Range(-1f, 1f);
+        hijo.hoWeights[0][0] = UnityEngine.Random.Range(-1f, 1f);
+        hijo.hiddenBias[0] = UnityEngine.Random.Range(-1f, 1f);
+      
+        return hijo;
+
+    }
+
+
+
+    public void reset(){
+
+        currentSpeed = initialSpeed;
+        
+        newGeneration();
+
+
+        GameObject floor1 =  GameObject.Find("Floor1");
+        GameObject floor2 =  GameObject.Find("Floor2");
+        floor1.GetComponent<Transform>().position = new Vector3(1f,GameObject.Find("Floor1").GetComponent<Transform>().position.y, 1 );
+        floor1.GetComponent<InfiniteScroll>().currentSpeed = currentSpeed;
+        floor2.GetComponent<Transform>().position = new Vector3(25.576f,GameObject.Find("Floor2").GetComponent<Transform>().position.y, 1 );
+        floor2.GetComponent<InfiniteScroll>().currentSpeed = currentSpeed;
 
     }
 
