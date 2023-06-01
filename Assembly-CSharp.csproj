@@ -38,10 +38,12 @@
   <ItemGroup>
      <Compile Include="Assets\Script\GroundScroll.cs" />
      <Compile Include="Assets\Script\InfiniteScroll.cs" />
+     <Compile Include="Assets\Script\DontDestroy.cs" />
      <Compile Include="Assets\Script\ControlDinosaurio.cs" />
      <Compile Include="Assets\Script\GameManager.cs" />
      <Compile Include="Assets\Script\NeuralNetwork.cs" />
      <Compile Include="Assets\Script\Enemy.cs" />
+     <Compile Include="Assets\Script\EnemyManager.cs" />
      <Compile Include="Assets\Script\Respaw.cs" />
     <Reference Include="UnityEngine">
         <HintPath>C:\Program Files\Unity\Hub\Editor\2021.3.16f1\Editor\Data\Managed\UnityEngine\UnityEngine.dll</HintPath>

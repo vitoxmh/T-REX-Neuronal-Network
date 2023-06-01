@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using System.IO;
 using System.Runtime.Serialization.Formatters.Binary;
+using UnityEngine.UI;
 
 public class GameManager : MonoBehaviour
 {
@@ -22,6 +23,10 @@ public class GameManager : MonoBehaviour
     public int generation = 1;
     public NeuralNetwork bestDinoNeuronal;
     public bool gameOver = false;
+    public Text textTime;
+    public Text nDinosario;
+    public Text generationText;
+    public float TimeGame = 0f;
     
 
 
@@ -51,46 +56,74 @@ public class GameManager : MonoBehaviour
     void Start()
     {
    
-          GameObject enemy =  GameObject.FindWithTag("Enemy");
-          enemy.GetComponent<Enemy>().currentSpeed = currentSpeed;
-          enemy.GetComponent<Enemy>().initialSpeed = initialSpeed;
-          enemy.GetComponent<Enemy>().maxSpeed = maxSpeed;
-          enemy.GetComponent<Enemy>().acceleration =acceleration;
+        
           dinos = new List<GameObject>();
 
-          for(int i = 0; i <= especimen; i++){
+          if(generation == 1){
+
+
+            inicioGeneracion();
+
+
+          }else{
+
+             newGeneration();
+          }
+
+    }
+
+
+    private void inicioGeneracion(){
+
+        for(int i = 0; i <= especimen; i++){
             
 
             GameObject nDino = Instantiate(dinosaruio, new Vector3(-5.917905f,-4.2f,0f), Quaternion.identity);
             nDino.GetComponent<ControlDinosaurio>().network =  new NeuralNetwork(4,2,2);
             dinos.Add(nDino);   
 
-          }
-
+        }
+        
     }
+
 
     // Update is called once per frame
     void Update()
     {
         
+       
+
         //Debug.Log(bestDinoNeuronal);
         if(!gameOver){
             currentSpeed += acceleration * Time.deltaTime;
             currentSpeed = Mathf.Clamp(currentSpeed, initialSpeed, maxSpeed);
+
+             TimeGame += Time.deltaTime;
+
+
+                nDinosario.text = "Dinosaurios:"+dinos.Count;
+                generationText.text = "Generation:"+generation;
+
+                int seconds = Mathf.RoundToInt(TimeGame);
+
+                textTime.text = "TIME:" + seconds.ToString("000");
+
+                if(dinos.Count >= 1){
+
+                    bestDinoNeuronal  = (NeuralNetwork)dinos[0].GetComponent<ControlDinosaurio>().network.Clone();
+
+                }
+
+                if(dinos.Count == 0){
+
+                    
+                    gameOver = true;
+
+                }
+
         }
 
-        if(dinos.Count >= 1){
-
-           bestDinoNeuronal  = (NeuralNetwork)dinos[0].GetComponent<ControlDinosaurio>().network.Clone();
-
-        }
-
-        if(dinos.Count == 0){
-
-               GameManager.gm.gameOver = true;
-               //reset();
-
-        }
+       
          
     }
 
@@ -115,24 +148,18 @@ public class GameManager : MonoBehaviour
 
     public void newGeneration(){
 
-
-
         for(int i = 0; i <= especimen; i++){
             
               
             GameObject nDino = Instantiate(dinosaruio, new Vector3(-5.917905f,-4.2f,0f), Quaternion.identity);
             
-          
-        NeuralNetwork t =  cruzar(bestDinoNeuronal);
+            NeuralNetwork t =  cruzar(bestDinoNeuronal);
          
-            dinosaruio.GetComponent<ControlDinosaurio>().network = t;
-
+            nDino.GetComponent<ControlDinosaurio>().network = t;
 
             dinos.Add(nDino);
            
-
         }
-
 
          generation++;   
     }
@@ -145,18 +172,37 @@ public class GameManager : MonoBehaviour
 
         NeuralNetwork hijo = new NeuralNetwork(4,2,2);
 
-        hijo.numInputs = newN.numInputs;
-        hijo.numHidden = newN.numHidden;
-        hijo.numOutputs = newN.numOutputs;
-        hijo.ihWeights = newN.ihWeights;
-        hijo.hoWeights = newN.hoWeights;
-        hijo.hiddenBias = newN.hiddenBias;
-        hijo.outputBias = newN.hiddenBias;
+       
+        for (int i = 0; i < newN.numInputs; i++)
+        {
+            for (int j = 0; j < newN.numHidden; j++)
+            {
+                hijo.ihWeights[i][j] =  newN.ihWeights[i][j];
+            }
+        }
+        for (int i = 0; i < newN.numHidden; i++)
+        {
+            for (int j = 0; j < newN.numOutputs; j++)
+            {
+                hijo.hoWeights[i][j] = newN.hoWeights[i][j];
+            }
+        }
+        for (int i = 0; i < newN.numHidden; i++)
+        {
+            hijo.hiddenBias[i] = newN.hiddenBias[i];
+        }
+        for (int i = 0; i < newN.numOutputs; i++)
+        {
+            hijo.outputBias[i] = newN.outputBias[i];
+        }
+       
 
-        hijo.ihWeights[0][0] = UnityEngine.Random.Range(-1f, 1f);
-        hijo.ihWeights[1][1] = UnityEngine.Random.Range(-1f, 1f);
-        hijo.hoWeights[0][0] = UnityEngine.Random.Range(-1f, 1f);
+        hijo.ihWeights[0][0] =  UnityEngine.Random.Range(-1f, 1f);
+        hijo.ihWeights[1][1] =  UnityEngine.Random.Range(-1f, 1f);
+        hijo.hoWeights[0][1] = UnityEngine.Random.Range(-1f, 1f);
         hijo.hiddenBias[0] = UnityEngine.Random.Range(-1f, 1f);
+        hijo.outputBias[0] = UnityEngine.Random.Range(-1f, 1f);
+
       
         return hijo;
 
@@ -166,17 +212,10 @@ public class GameManager : MonoBehaviour
 
     public void reset(){
 
-        currentSpeed = initialSpeed;
-        
-        newGeneration();
 
-
-        GameObject floor1 =  GameObject.Find("Floor1");
-        GameObject floor2 =  GameObject.Find("Floor2");
-        floor1.GetComponent<Transform>().position = new Vector3(1f,GameObject.Find("Floor1").GetComponent<Transform>().position.y, 1 );
-        floor1.GetComponent<InfiniteScroll>().currentSpeed = currentSpeed;
-        floor2.GetComponent<Transform>().position = new Vector3(25.576f,GameObject.Find("Floor2").GetComponent<Transform>().position.y, 1 );
-        floor2.GetComponent<InfiniteScroll>().currentSpeed = currentSpeed;
+    
+      
+       
 
     }
 

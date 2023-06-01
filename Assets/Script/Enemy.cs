@@ -33,7 +33,7 @@ public class Enemy : MonoBehaviour
             transform.position = new Vector3(transform.position.x - (currentSpeed * Time.deltaTime), transform.position.y, transform.position.z);
         }else{ 
 
-            Animator.speed = 0f;
+             Destroy(gameObject);
             
 
         }

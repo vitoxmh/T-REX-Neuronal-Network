@@ -24,9 +24,9 @@ public class Respaw : MonoBehaviour
 
         if (col.gameObject.CompareTag("Enemy"))
         {
-
-            GameManager.gm.newEnemy();
-            Destroy(col.gameObject);
+             Destroy(col.gameObject);
+           
+           
 
         }
 
