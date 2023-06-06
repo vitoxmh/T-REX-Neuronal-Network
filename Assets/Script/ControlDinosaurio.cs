@@ -16,6 +16,9 @@ public class ControlDinosaurio : MonoBehaviour
     public float currentSpeed;
     public float liveTime = 0;
     public bool gamer = false;
+    public LayerMask mascaraObjetivo;
+    public float distanciaMaxima = 15f;
+    public float angle;
 
 
     void Start()
@@ -35,14 +38,9 @@ public class ControlDinosaurio : MonoBehaviour
        
      
        
-        float[] inputs = new float[4];
+        float[] inputs = new float[6];
         
-        
-
-       
-
-      
-
+    
         if(!dead){
             
             liveTime += Time.deltaTime;
@@ -74,36 +72,85 @@ public class ControlDinosaurio : MonoBehaviour
 
                 GameObject enemigo = GameObject.FindGameObjectWithTag("Enemy");
 
+                float distanciaEnemy2 = 1f;
+
+                float angleInRadians = Mathf.Deg2Rad * angle;
+                Vector2 direction = new Vector2(Mathf.Cos(angleInRadians), Mathf.Sin(angleInRadians));
+
+                // Lanzar el rayo
+                RaycastHit2D hit2 = Physics2D.Raycast(transform.position, direction, distanciaMaxima);
+
+                Debug.DrawRay(transform.position, direction * distanciaMaxima, Color.blue); 
+
+
+               
+
+                 if (hit2.collider.tag == "Enemy")
+                {
+
+                         distanciaEnemy2 = hit2.distance;
+
+                }
+
+
                 if(enemigo != null){
 
-                    float distancia = transform.position.x - enemigo.GetComponent<Transform>().position.x;
+                    float distancia = 1f;;
+
+   
+                    Debug.DrawRay(new Vector2(transform.position.x + 0.5f, transform.position.y), Vector3.right * distanciaMaxima, Color.red);
+
+                    RaycastHit2D hit = Physics2D.Raycast(new Vector2(transform.position.x + 0.5f, transform.position.y), Vector3.right, distanciaMaxima);
+
+                    if (hit.collider != null)
+                    {
+                        
+                        if (hit.collider.tag == "Enemy")
+                        {
+
+                            Debug.Log("Enemigo:"+hit.distance);
+                            distancia = hit.distance;
+
+                        }
+
+                    }
+
 
                     inputs[0] = GameManager.gm.currentSpeed; // Velocidad
                     inputs[1] = distancia;
                     inputs[2] = enemigo.GetComponent<Transform>().position.y;
                     inputs[3] = enemigo.GetComponent<Transform>().position.x;
 
+                    if(enemigo.GetComponent<Enemy>().type == 1){
+
+                             inputs[4] = 1f;
+                    }else{
+
+                            inputs[4] = 0f;
+
+                    }
+                   
+
+                    inputs[5] = distanciaEnemy2;
+            
                     float[] outputs = network.FeedForward(inputs);
 
 
-                    if (enElSuelo && outputs[0] > 0.5f)
+                    if (enElSuelo && outputs[0] > 0.8f)
                     {
                         rb.AddForce(new Vector2(0f, velocidadSalto), ForceMode2D.Impulse);
                         enElSuelo = false;
                         animator.SetInteger("PlayerAnimation", 1);
-                    }
+     
 
-                    if (outputs[1] > 0.5f)
+
+                    }else if (outputs[1] > 0.8f)
                     {
                         agachado = true;
                     
                     }
 
-                    else if (Input.GetKeyUp(KeyCode.DownArrow))
-                    {
-                        agachado = false;
-                    
-                    }
+                   
 
                 }
 
@@ -167,16 +214,7 @@ public class ControlDinosaurio : MonoBehaviour
         {
                 GameManager.gm.removeList(gameObject);
                
-                if(GameManager.gm.dinos.Count == 1){
-
-                    dead = true;
-
-                }else{
-
-                     
-                    Destroy(gameObject);
-
-                }
+                 Destroy(gameObject);
 
         }
 

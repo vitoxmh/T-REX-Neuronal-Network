@@ -77,7 +77,7 @@ public class NeuralNetwork : ICloneable
             {
                 sum += inputs[j] * ihWeights[j][i];
             }
-            hiddenLayer[i] = Sigmoid(sum + hiddenBias[i]);
+            hiddenLayer[i] = ReLU(sum + hiddenBias[i]);
         }
         for (int i = 0; i < numOutputs; i++)
         {
@@ -86,7 +86,7 @@ public class NeuralNetwork : ICloneable
             {
                 sum += hiddenLayer[j] * hoWeights[j][i];
             }
-            outputLayer[i] = Sigmoid(sum + outputBias[i]);
+            outputLayer[i] = ReLU(sum + outputBias[i]);
         }
         return outputLayer;
     }
@@ -94,6 +94,12 @@ public class NeuralNetwork : ICloneable
     private float Sigmoid(float x)
     {
         return 1f / (1f + Mathf.Exp(-x));
+    }
+
+
+    private float ReLU(float x)
+    {
+        return Math.Max(0f, x);
     }
 
 

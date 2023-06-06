@@ -144,6 +144,14 @@ MonoBehaviour:
   velocidadSalto: 8.5
   gravedadExtra: 10
   dead: 0
+  currentSpeed: 0
+  liveTime: 0
+  gamer: 0
+  mascaraObjetivo:
+    serializedVersion: 2
+    m_Bits: 64
+  distanciaMaxima: 15
+  angle: 7
 --- !u!61 &7309841925360306655
 BoxCollider2D:
   m_ObjectHideFlags: 0

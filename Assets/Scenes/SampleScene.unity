@@ -137,7 +137,7 @@ GameObject:
   - component: {fileID: 326126780}
   m_Layer: 0
   m_Name: Floor1
-  m_TagString: Floor
+  m_TagString: FloorMove
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -155,7 +155,7 @@ BoxCollider2D:
   m_IsTrigger: 0
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: 0, y: -0.34631324}
+  m_Offset: {x: 0, y: -0.47667456}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0.5, y: 0.5}
@@ -166,7 +166,7 @@ BoxCollider2D:
     adaptiveTiling: 0
   m_AutoTiling: 0
   serializedVersion: 2
-  m_Size: {x: 24.576002, y: 0.5157056}
+  m_Size: {x: 24.576002, y: 0.25498295}
   m_EdgeRadius: 0
 --- !u!212 &326126778
 SpriteRenderer:
@@ -283,20 +283,23 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 586a7ea177c548a4d81390a3bf0fe2ee, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  input: 6
+  layer: 3
+  output: 2
   initialSpeed: 5
   acceleration: 0.5
   maxSpeed: 30
   tileSize: 10
   currentSpeed: 0
   enemy:
-  - {fileID: 6403804779774053295, guid: f5460c02032b4e940aa51339c1db56a3, type: 3}
+  - {fileID: 5343348315309459460, guid: 0aaaa328e8d4ff54bb7b7eb951610809, type: 3}
   - {fileID: 7794395818320885529, guid: d8843e9af87acbe47999276a2505a117, type: 3}
   - {fileID: 5736399845390829054, guid: 67bd359d4a1df3141bb912c8105dec04, type: 3}
   - {fileID: 6320649955723341338, guid: 60dd77e404489a743b33b5387510ab79, type: 3}
   - {fileID: 6320649955723341338, guid: 78c555ed6e81e6f4ea5b53a5af527e2c, type: 3}
   - {fileID: 6320649955723341338, guid: 78c76e6b05da4a14da20170af59a55f3, type: 3}
   dinosaruio: {fileID: 7309841925360306630, guid: caf11bce1e6459b4cb74ac11b8d209a9, type: 3}
-  especimen: 20
+  especimen: 300
   dinos: []
   generation: 1
   gameOver: 0
@@ -304,6 +307,8 @@ MonoBehaviour:
   nDinosario: {fileID: 1903936435}
   generationText: {fileID: 1986519716}
   TimeGame: 0
+  mutationRate: 0.1
+  bestLive: 0
 --- !u!4 &488764146
 Transform:
   m_ObjectHideFlags: 0
@@ -523,7 +528,7 @@ RectTransform:
   m_GameObject: {fileID: 1007389357}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 0.8274004, y: 0.8274004, z: 0.8274004}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 1602361639}
@@ -531,7 +536,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 141.9, y: 83.78999}
+  m_AnchoredPosition: {x: 192.00002, y: 112.04401}
   m_SizeDelta: {x: 170.11, y: 31.99}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1007389359
@@ -576,6 +581,64 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1007389357}
   m_CullTransparentMesh: 1
+--- !u!1 &1092019054
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1092019056}
+  - component: {fileID: 1092019055}
+  m_Layer: 0
+  m_Name: GameObject
+  m_TagString: Floor
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!61 &1092019055
+BoxCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1092019054}
+  m_Enabled: 1
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: -1.4488478, y: -2.3184502}
+  m_SpriteTilingProperty:
+    border: {x: 0, y: 0, z: 0, w: 0}
+    pivot: {x: 0, y: 0}
+    oldSize: {x: 0, y: 0}
+    newSize: {x: 0, y: 0}
+    adaptiveTilingThreshold: 0
+    drawMode: 0
+    adaptiveTiling: 0
+  m_AutoTiling: 0
+  serializedVersion: 2
+  m_Size: {x: 26.482023, y: 1.8286476}
+  m_EdgeRadius: 0
+--- !u!4 &1092019056
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1092019054}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 1.1102774, y: -3.3332117, z: 0.08406739}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 8
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1602361635
 GameObject:
   m_ObjectHideFlags: 0
@@ -644,7 +707,7 @@ Canvas:
   m_GameObject: {fileID: 1602361635}
   m_Enabled: 1
   serializedVersion: 3
-  m_RenderMode: 0
+  m_RenderMode: 1
   m_Camera: {fileID: 519420031}
   m_PlaneDistance: 100
   m_PixelPerfect: 0
@@ -738,7 +801,7 @@ GameObject:
   - component: {fileID: 1730193572}
   m_Layer: 0
   m_Name: Floor2
-  m_TagString: Floor
+  m_TagString: FloorMove
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -775,7 +838,7 @@ BoxCollider2D:
   m_IsTrigger: 0
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: 0, y: -0.34631324}
+  m_Offset: {x: 0, y: -0.46037936}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0.5, y: 0.5}
@@ -786,7 +849,7 @@ BoxCollider2D:
     adaptiveTiling: 0
   m_AutoTiling: 0
   serializedVersion: 2
-  m_Size: {x: 24.576002, y: 0.5157056}
+  m_Size: {x: 24.576002, y: 0.28757334}
   m_EdgeRadius: 0
 --- !u!212 &1730193574
 SpriteRenderer:
@@ -950,7 +1013,7 @@ RectTransform:
   m_GameObject: {fileID: 1903936433}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 0.8274004, y: 0.8274004, z: 0.8274004}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 1602361639}
@@ -958,7 +1021,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 141.9, y: 64.4}
+  m_AnchoredPosition: {x: 192, y: 96}
   m_SizeDelta: {x: 170.11, y: 31.99}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1903936435
@@ -1030,7 +1093,7 @@ RectTransform:
   m_GameObject: {fileID: 1986519714}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 0.8274004, y: 0.8274004, z: 0.8274004}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 1602361639}
@@ -1038,7 +1101,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 141.9, y: 45}
+  m_AnchoredPosition: {x: 192, y: 79.948006}
   m_SizeDelta: {x: 170.11, y: 31.99}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1986519716

@@ -10,7 +10,11 @@ public class GameManager : MonoBehaviour
     // Start is called before the first frame update
 
     public static GameManager gm;
-
+     
+    public int input;
+    public int layer;
+    public int output;
+  
     public float initialSpeed = 2f; // Velocidad inicial del piso
     public float acceleration = 0.1f; // Aceleración gradual del piso
     public float maxSpeed = 10f; // Velocidad máxima del piso
@@ -22,11 +26,16 @@ public class GameManager : MonoBehaviour
     public List<GameObject> dinos;
     public int generation = 1;
     public NeuralNetwork bestDinoNeuronal;
+    public NeuralNetwork bestDinoNeuronal2;
     public bool gameOver = false;
     public Text textTime;
     public Text nDinosario;
     public Text generationText;
     public float TimeGame = 0f;
+    public float mutationRate;
+    public float bestLive = 0f;
+
+   
     
 
 
@@ -79,7 +88,7 @@ public class GameManager : MonoBehaviour
             
 
             GameObject nDino = Instantiate(dinosaruio, new Vector3(-5.917905f,-4.2f,0f), Quaternion.identity);
-            nDino.GetComponent<ControlDinosaurio>().network =  new NeuralNetwork(4,2,2);
+            nDino.GetComponent<ControlDinosaurio>().network =  new NeuralNetwork(input,layer,output);
             dinos.Add(nDino);   
 
         }
@@ -108,16 +117,27 @@ public class GameManager : MonoBehaviour
 
                 textTime.text = "TIME:" + seconds.ToString("000");
 
-                if(dinos.Count >= 1){
+                if(dinos.Count >= 2){
 
-                    bestDinoNeuronal  = (NeuralNetwork)dinos[0].GetComponent<ControlDinosaurio>().network.Clone();
+                    if(dinos[0].GetComponent<ControlDinosaurio>().liveTime > bestLive){
+
+                        bestDinoNeuronal  = (NeuralNetwork)dinos[0].GetComponent<ControlDinosaurio>().network.Clone();
+                        bestDinoNeuronal2  = (NeuralNetwork)dinos[1].GetComponent<ControlDinosaurio>().network.Clone();
+                        bestLive = dinos[0].GetComponent<ControlDinosaurio>().liveTime;
+
+                    }
+                  
+
+                   
 
                 }
 
                 if(dinos.Count == 0){
 
-                    
-                    gameOver = true;
+                    bestLive = 0f;
+                    reset();
+
+
 
                 }
 
@@ -153,9 +173,9 @@ public class GameManager : MonoBehaviour
               
             GameObject nDino = Instantiate(dinosaruio, new Vector3(-5.917905f,-4.2f,0f), Quaternion.identity);
             
-            NeuralNetwork t =  cruzar(bestDinoNeuronal);
-         
-            nDino.GetComponent<ControlDinosaurio>().network = t;
+            NeuralNetwork t =  cruzar(bestDinoNeuronal,bestDinoNeuronal2);
+
+            nDino.GetComponent<ControlDinosaurio>().network = Mutate(t);
 
             dinos.Add(nDino);
            
@@ -166,44 +186,147 @@ public class GameManager : MonoBehaviour
 
 
 
+    private NeuralNetwork Mutate(NeuralNetwork network)
+    {
+        NeuralNetwork mutatedNetwork = new NeuralNetwork(input,layer,output);
 
-    private NeuralNetwork cruzar(NeuralNetwork newN){
+        for (int i = 0; i < network.numInputs; i++)
+        {
+            for (int j = 0; j < network.numHidden; j++)
+            {
+                if(Random.Range(0f, 1f) < mutationRate){
+
+                    mutatedNetwork.ihWeights[i][j] =  Random.Range(0f, 1f);
+
+                }else{
+
+                    mutatedNetwork.ihWeights[i][j] =  network.ihWeights[i][j];
+                }
+                
+            }
+        }
 
 
-        NeuralNetwork hijo = new NeuralNetwork(4,2,2);
+        for (int i = 0; i < network.numHidden; i++)
+        {
+            for (int j = 0; j < network.numOutputs; j++)
+            {
+                
+                if(Random.Range(0f, 1f) < mutationRate){
+
+                    mutatedNetwork.hoWeights[i][j] = Random.Range(0f, 1f);
+
+                }else{
+
+                    mutatedNetwork.hoWeights[i][j] = network.hoWeights[i][j];
+                }
+            }
+        }
+
+
+        for (int i = 0; i < network.numHidden; i++)
+        {
+             if(Random.Range(0f, 1f) < mutationRate){
+
+                  mutatedNetwork.hiddenBias[i] = Random.Range(0f, 1f);
+
+             }else{
+
+                  mutatedNetwork.hiddenBias[i] = network.hiddenBias[i];
+
+             }
+          
+        }
+
+
+        for (int i = 0; i < network.numOutputs; i++)
+        {   
+             if(Random.Range(0f, 1f) < mutationRate){
+
+                mutatedNetwork.outputBias[i] = Random.Range(0f, 1f);
+
+             }else{
+
+                mutatedNetwork.outputBias[i] = network.outputBias[i];
+             }
+            
+        }
+
+        return mutatedNetwork;
+    }
+
+
+
+    private NeuralNetwork cruzar(NeuralNetwork newN,NeuralNetwork newN2){
+
+
+        NeuralNetwork hijo = new NeuralNetwork(input,layer,output);
 
        
         for (int i = 0; i < newN.numInputs; i++)
         {
             for (int j = 0; j < newN.numHidden; j++)
             {
-                hijo.ihWeights[i][j] =  newN.ihWeights[i][j];
+                if(Random.Range(0f, 1f) < 0.5f){
+
+                    hijo.ihWeights[i][j] =  newN.ihWeights[i][j];
+
+                }else{
+
+                    hijo.ihWeights[i][j] =  newN2.ihWeights[i][j];
+                }
+                
             }
         }
+
+
         for (int i = 0; i < newN.numHidden; i++)
         {
             for (int j = 0; j < newN.numOutputs; j++)
             {
-                hijo.hoWeights[i][j] = newN.hoWeights[i][j];
+                
+
+                
+                if(Random.Range(0f, 1f) < 0.5f){
+
+                    hijo.hoWeights[i][j] = newN.hoWeights[i][j];
+
+                }else{
+
+                    hijo.hoWeights[i][j] = newN2.hoWeights[i][j];
+                }
             }
         }
+
+
         for (int i = 0; i < newN.numHidden; i++)
         {
-            hijo.hiddenBias[i] = newN.hiddenBias[i];
+             if(Random.Range(0f, 1f) < 0.5f){
+
+                  hijo.hiddenBias[i] = newN.hiddenBias[i];
+
+             }else{
+
+                  hijo.hiddenBias[i] = newN2.hiddenBias[i];
+
+             }
+          
         }
+
+
         for (int i = 0; i < newN.numOutputs; i++)
-        {
-            hijo.outputBias[i] = newN.outputBias[i];
+        {   
+             if(Random.Range(0f, 1f) < 0.5f){
+
+                hijo.outputBias[i] = newN.outputBias[i];
+
+             }else{
+
+                hijo.outputBias[i] = newN2.outputBias[i];
+             }
+            
         }
-       
-
-        hijo.ihWeights[0][0] =  UnityEngine.Random.Range(-1f, 1f);
-        hijo.ihWeights[1][1] =  UnityEngine.Random.Range(-1f, 1f);
-        hijo.hoWeights[0][1] = UnityEngine.Random.Range(-1f, 1f);
-        hijo.hiddenBias[0] = UnityEngine.Random.Range(-1f, 1f);
-        hijo.outputBias[0] = UnityEngine.Random.Range(-1f, 1f);
-
-      
+             
         return hijo;
 
     }
@@ -212,8 +335,33 @@ public class GameManager : MonoBehaviour
 
     public void reset(){
 
+        currentSpeed = initialSpeed;
+        
 
-    
+        GameObject[] listEnemy = GameObject.FindGameObjectsWithTag("Enemy");
+
+        for (int i = 0; i < listEnemy.Length; i++)
+        {
+
+      
+            Destroy(listEnemy[i]);
+
+        }
+
+
+
+        GameObject[] listFloor = GameObject.FindGameObjectsWithTag("FloorMove");
+
+        for (int i = 0; i < listFloor.Length; i++)
+        {
+
+      
+            listFloor[i].GetComponent<InfiniteScroll>().currentSpeed = currentSpeed;
+
+        }
+
+        newGeneration();
+        
       
        
 

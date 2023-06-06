@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 3900855539674192440}
   - component: {fileID: 3900855539674192447}
   - component: {fileID: 915382345144473270}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Enemy04
   m_TagString: Enemy
   m_Icon: {fileID: 0}
@@ -151,3 +151,4 @@ MonoBehaviour:
   currentSpeed: 0
   positionX: -3.82
   type: 1
+  Animator: {fileID: 0}
